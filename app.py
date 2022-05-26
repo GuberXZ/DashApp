@@ -526,4 +526,4 @@ def predict_hd_summary(data_patient):
 
 # Start the dashboard with defined host and port.
 if __name__ == '__main__':
-    app.run_server(debug=True,host='127.0.0.1',port=8000)
+    app.run_server(debug=True)
