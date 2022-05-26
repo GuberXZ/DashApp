@@ -6,3 +6,4 @@ numpy
 lime
 joblib
 gunicorn
+dash_bootstrap_components
