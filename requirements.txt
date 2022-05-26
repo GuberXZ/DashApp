@@ -7,3 +7,4 @@ lime
 joblib
 gunicorn
 dash_bootstrap_components
+sklearn==0.23.2
