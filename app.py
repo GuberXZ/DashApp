@@ -52,6 +52,7 @@ col = ['Age.at.MRI','Prostate.volume','PSA.value.at.MRI','Index.lesion.size',
 
 # Start Dashboard
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server()
 
 # Layout
 app.layout = html.Div([
