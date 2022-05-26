@@ -1,3 +1,4 @@
+pywin32==227; platform_system == "Windows"
 alembic==1.7.7
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
