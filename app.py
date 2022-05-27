@@ -392,7 +392,7 @@ def generate_feature_matrix(Age, Prostate_volume, PSA_value, lesion_size, PIRADS
     values = [float(v) for v in val]
     
     XX = c.dumm(values)
-    XXX = c.minmax(XX,data)
+    XXX = c.minmax(XX,dataw)
     Y = [XXX[:-1]]
 
     x_patient = pd.DataFrame(data=Y, columns=column_names, index=[0])
