@@ -1,6 +1,5 @@
 # Standard
 #from distutils.log import debug
-import os
 import pandas as pd
 import numpy as np
 
@@ -16,27 +15,18 @@ from dash.dependencies import Input, Output, State
 # For plotting risk indicator and for creating waterfall plot
 import lime.lime_tabular
 import plotly.graph_objs as go
-import matplotlib.pyplot as plt
 from plotly.subplots import make_subplots
 
 # To import joblib file model objects
 import joblib
 
 
-# Load model and pipeline
-# current_folder = os.path.dirname(__file__)
-# #hd_model_obj = joblib.load(os.path.join(current_folder, 'heart_disease_prediction_model_Jul2020.pkl'))
-
-# normally we would want the pipeline object as well, but in this example transformation is minimal so we will just
-# construct the require format on the fly from data entry. Also means we don't need to rely on PyCaret here
-# object has 2 slots, first is data pipeline, second is the model object
-# hdpred_model = hd_model_obj[1]
-# hd_pipeline = []
-
 #Random Forest and Database Load
-file = './zDatabase/XAI - Limpo_dummified_minmax_smote.csv'
-fileTrain = './zDatabase/XAI - Limpo_dummified_minmax_smote_train.csv'
-rfb = joblib.load('./zDatabase/randomforests.joblib')
+filew = './zDatabase/XAI - Limpo_dummified_smote.csv'
+file = './zDatabase/XAI - Limpo_dummified_smote_minmax.csv'
+fileTrain = './zDatabase/XAI - Limpo_dummified_smote_minmax_train.csv'
+rfb = joblib.load('./zDatabase/randomforestsAPP.joblib')
+dataw = pd.read_csv(filew,index_col='surgycal margin',na_values='',sep=',', decimal='.')
 data = pd.read_csv(file,index_col='surgycal margin',na_values='',sep=',', decimal='.') 
 train: pd.DataFrame = pd.read_csv(fileTrain)
 trnY: np.ndarray = train.pop('surgycal margin').values
@@ -403,11 +393,9 @@ def generate_feature_matrix(Age, Prostate_volume, PSA_value, lesion_size, PIRADS
     
     XX = c.dumm(values)
     XXX = c.minmax(XX,data)
-    XXX.pop(-1)
+    Y = [XXX[:-1]]
 
-    x_patient = pd.DataFrame(data=[XXX],
-                             columns=column_names,
-                             index=[0])
+    x_patient = pd.DataFrame(data=Y, columns=column_names, index=[0])
 
     return x_patient.to_json()
 
@@ -424,11 +412,13 @@ def predict_hd_summary(data_patient):
 
     # read in data and predict likelihood of surgical margin
     x_new = pd.read_json(data_patient)
+    print(x_new.to_numpy())
     prob_0 = rfb.predict_proba(x_new.to_numpy())[:, 0]*100
     prob_1 = rfb.predict_proba(x_new.to_numpy())[:, 1]*100
-    y_val = [prob_0 if prob_0>prob_1 else prob_1][0]
+    
+    y_val = [prob_0 if prob_0 > prob_1 else prob_1][0]
     text_val = str(np.round(y_val[0], 1)) + "%"
-    clazz = ['negative' if prob_0>prob_1 else 'positive'][0]
+    clazz = ['negative' if prob_0 > prob_1 else 'positive'][0]
     
     # assign a risk group
     # if y_val/100 <= 0.275685:
@@ -505,17 +495,17 @@ def predict_hd_summary(data_patient):
     explainer = lime.lime_tabular.LimeTabularExplainer(trnX,class_names=['SurgycalMargin-0','SurgycalMargin-1'],feature_names=col,
                                                    categorical_features=[5,6,7,8,9,10,11,12,13,14,15,16,17], 
                                                    categorical_names=[col[i] for i in range(5,18)],kernel_width=3,verbose=True)
-    exp = explainer.explain_instance(x_new.values.flatten(),rfb.predict_proba,num_features=9,num_samples=1000)
+    exp = explainer.explain_instance(x_new.values.flatten(),rfb.predict_proba,num_features=10,num_samples=1000)
     explist = exp.as_list()
-    feature_importance_patient_pos = [v[1] for v in explist if v[1]>0]
-    feature_importance_patient_neg = [abs(v[1]) for v in explist if v[1]<0]
-    labels_pos = [v[0] for v in explist if v[1]>0]
-    labels_neg = [v[0] for v in explist if v[1]<0]
+    labels_0 = [v[0] for v in explist if v[1] < 0]
+    feature_importance_patient_0 = [abs(v[1]) for v in explist if v[1]<0]
+    feature_importance_patient_1 = [v[1] for v in explist if v[1]>0]
+    labels_1 = [v[0] for v in explist if v[1]>0]
 
     specs = [[{'type':'domain'}, {'type':'domain'}]]
     fig2 = make_subplots(rows=1, cols=2,subplot_titles=('SurgicalMargin-0','SurgicalMargin-1'), specs=specs) # Double pie
-    fig2.add_trace(go.Pie(labels=labels_pos, values=feature_importance_patient_neg,scalegroup='one',name=''), 1, 1)
-    fig2.add_trace(go.Pie(labels=labels_neg, values=feature_importance_patient_pos,scalegroup='one',name=''), 1, 2)
+    fig2.add_trace(go.Pie(labels=labels_0, values=feature_importance_patient_0,scalegroup='one',name=''), 1, 1)
+    fig2.add_trace(go.Pie(labels=labels_1, values=feature_importance_patient_1,scalegroup='one',name=''), 1, 2)
     fig2.update_traces(hole=.2, hoverinfo="label+percent+name")
     fig2.update(layout_showlegend=False)
 
