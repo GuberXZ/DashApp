@@ -305,7 +305,7 @@ app.layout = html.Div([
                                      style={'font-weight': 'bold', 'font-size': 14}),
                             html.Div(['A cohort of 121 patients at the Hospital da Luz were assessed on multiple '
                                       'characteristics and whether the surgical margin was followed was also recorded. '
-                                      'In total 45% (n=139) of patients had surgical margin.'],
+                                      'In total 28% (n=34) of patients had surgical margin caracterized as 0.'],
                                      style={'font-size': 14, 'padding': '0px 0px 20px 0px'}),
                             html.Div('Model features and cohort summary',
                                      style={'font-weight': 'bold', 'font-size': 14}),
