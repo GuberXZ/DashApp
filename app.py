@@ -111,9 +111,9 @@ app.layout = html.Div([
                     html.Label('Lesion PIRADS.V2: '),
                     dcc.Dropdown(
                         options=[
-                            {'label': 'Intermediate cancer significance', 'value': '3'},
-                            {'label': 'High cancer significance', 'value': '4'},
-                            {'label': 'Very High cancer significance', 'value': '5'}
+                            {'label': '3', 'value': '3'},
+                            {'label': '4', 'value': '4'},
+                            {'label': '5', 'value': '5'}
                         ],
                         value='4',
                         id='PIRADS_V2'
@@ -177,7 +177,7 @@ app.layout = html.Div([
                     )
                 ]), width={"size": 3}),
                 dbc.Col(html.Div([
-                    html.Label('Black estrition periprostatic fat: '),
+                    html.Label('Black restriction periprostatic fat: '),
                     dcc.Dropdown(
                         options=[
                             {'label': 'No', 'value': '0'},#label?
@@ -262,7 +262,7 @@ app.layout = html.Div([
                 style={'width': '100%', 'height': 80},
                 config={'displayModeBar': False}
             ), style={'marginLeft': 15}),
-            dbc.Row([html.Div(id='main_text', style={'font-size': 16, 'padding': '10px 25px'})]),
+            dbc.Row([html.Div(id='main_text', style={'font-size': 20, 'padding': '10px 25px'})]),
             
             dbc.Row([html.Div("Factors contributing to predicted likelihood of surgical margin",
                               style={'font-weight': 'bold', 'font-size': 16, 'padding': '10px 25px'})]),
@@ -520,7 +520,7 @@ def predict_hd_summary(data_patient):
     fig2.update(layout_showlegend=False)
 
     return fig1,\
-        f"Based on the patient's profile, the predicted likelihood of a {c} surgical is margin {text_val}. ", \
+        f"Based on the patient's profile, the predicted likelihood of a [{c} surgical margin] {text_val}. ", \
         fig2
 
 
