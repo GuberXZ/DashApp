@@ -8,3 +8,4 @@ joblib
 gunicorn
 dash_bootstrap_components
 scikit-learn==0.23.2
+shap
