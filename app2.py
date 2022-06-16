@@ -483,19 +483,6 @@ def predict_shap_summary(data_patient):
     x_new = pd.read_json(data_patient)
     y_val = rfb.predict_proba(x_new)[:, 1]*100
     text_val = str(np.round(y_val[0], 1)) + "%"
-    
-    if y_val <= 50:
-        risk_grp = 'surgycal margin 0'
-    else:
-        risk_grp = 'surgycal margin 1'
-
-    # # assign an action related to the risk group
-    # rg_actions = {'surgycal margin 0': ['Discuss with patient any single large risk factors they may have, and otherwise '
-    #                            'continue supporting healthy lifestyle habits. Follow-up in 12 months'],
-    #               'surgycal margin 1': ['Immediate follow-up with patient to discuss next steps including additional '
-    #                             'follow-up tests, lifestyle changes and medications.']}
-
-    # next_action = rg_actions[risk_grp][0]
 
     # create a single bar plot showing likelihood of heart disease
     fig1 = go.Figure()
@@ -518,7 +505,7 @@ def predict_shap_summary(data_patient):
         type="rect",
         x0=0,
         y0=bot_val,
-        x1=0.5 * 100,
+        x1=0.4 * 100,
         y1=top_val,
         line=dict(
             color="white",
@@ -528,7 +515,7 @@ def predict_shap_summary(data_patient):
     
     fig1.add_shape(
         type="rect",
-        x0=0.5 * 100,
+        x0=0.4 * 100,
         y0=bot_val,
         x1=1 * 100,
         y1=top_val,
@@ -538,7 +525,7 @@ def predict_shap_summary(data_patient):
         fillcolor="#3283FE"
     )
     fig1.add_annotation(
-        x=0.5 / 2 * 100,
+        x=0.4 / 2 * 100,
         y=0.75,
         text="Surgical Margin 0",
         showarrow=False,
@@ -546,7 +533,7 @@ def predict_shap_summary(data_patient):
     )
 
     fig1.add_annotation(
-        x=0.75 * 100,
+        x=0.7 * 100,
         y=0.75,
         text="Surgical Margin 1",
         showarrow=False,
@@ -556,7 +543,8 @@ def predict_shap_summary(data_patient):
 
     # do shap value calculations for basic waterfall plot
     explainer_patient = shap.TreeExplainer(rfb)
-    shap_values_patient = explainer_patient.shap_values(x_new)
+    sp_values_patient = explainer_patient.shap_values(x_new)
+    shap_values_patient = [sp_values_patient[0].round(3),sp_values_patient[1].round(3)]
     updated_fnames = x_new.T.reset_index()
     updated_fnames.columns = ['feature', 'value']
     updated_fnames['shap_original'] = pd.Series(shap_values_patient[0].flatten())
@@ -634,24 +622,6 @@ def predict_shap_summary(data_patient):
     )
     fig2.update_yaxes(automargin=True)
     fig2.update_xaxes(automargin=True)
-    # fig2.add_annotation(
-    #     yref='paper',
-    #     xref='x',
-    #     x=explainer_patient.expected_value,
-    #     y=0,
-    #     text="E[f(x)] = {:.2f}".format(explainer_patient.expected_value[0]),
-    #     showarrow=False,
-    #     font=dict(color="black", size=14)
-    # )
-    # fig2.add_annotation(
-    #     yref='paper',
-    #     xref='x',
-    #     x=plot_data['shap_original'].sum()+explainer_patient.expected_value,
-    #     y=1,
-    #     text="f(x) = {:.2f}".format(plot_data['shap_original'].sum()+explainer_patient.expected_value[0]),
-    #     showarrow=True,
-    #     font=dict(color="black", size=14)
-    # )
 
     return fig1,\
         f"Based on the patient's profile, the predicted likelihood of a positive surgical margin is {text_val}. ", \
