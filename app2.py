@@ -264,7 +264,7 @@ app.layout = html.Div([
                     color="primary",
                 ),
                 dbc.Collapse(
-                    dbc.Card(dbc.Row([ #Colapsable thingy
+                    dbc.Card(dbc.Row([ #Colapsable details
                         dbc.Col([
                             html.Div('Predictive model information',
                                      style={'font-weight': 'bold', 'font-size': 20, 'padding': '0px 0px 20px 0px'}),
@@ -283,26 +283,48 @@ app.layout = html.Div([
                                      style={'font-weight': 'bold', 'font-size': 14}),
                             html.Div(['The data was split into a training set (70%, n=113) and a test set (30%, '
                                       'n=49). The final model '
-                                      'achieved an average AUC of 1.0 in the training set and 0.86 in the '
-                                      'test set. Figure 1 to the far right indicates what the model identified as '
+                                      'achieved an average AUC of 1.0 in the training set and 0.86 in the test set'
+                                      'Figure 2 to the far right indicates what the model identified as '
                                       'importance of predictors of the surgical margin. The more important features are '
                                       'towards the top of the figure, which includes characteristics like affected '
                                       'PSA value at MRI, Age at MRI, prostate volume and if smooth capsular bulging'
-                                      'can be or not identified.'],
+                                      'can be or not identified.'
+                                      ],
                                      style={'font-size': 14, 'padding': '0px 0px 20px 0px'}),
+                            
                         ]),
                         dbc.Col([
+                            html.Div('Model Performance',
+                                     style={'font-weight': 'bold', 'font-size': 14}),
+                            html.Div(['Figure 1 contains the model performance, according to the '
+                                      '4 metrics used - accuracy, recall, specificity and precision - '
+                                      'and the model confusion matrix. '
+                                      'Figure 3 contains the ROC chart, from which we selected the threshold '
+                                      'of classification: if a patient has more than 40% probability of '
+                                      'having positive surgical margin (1), then they are classified as positive. '
+                                      ],
+                                      style={'font-size': 14, 'padding': '0px 0px 20px 0px'}),
                             html.Div('Table 1. Cohort Table',
-                                     style={'font-weight': 'bold', 'font-size': 20, 'textAlign': 'middle'}),
+                                     style={'font-weight': 'bold', 'font-size': 14, 'textAlign': 'middle'}),
                             html.Div(className='container',
                                 children=[html.Img(src=app.get_asset_url('Cohort_table.png'),
-                                                   style={'height': '100%', 'width': '100%'})])]),
+                                                   style={'height': '100%', 'width': '100%'})])
+                            ]),
+                            
                         dbc.Col([
-                            html.Div('Figure 1. Feature importance',
-                                     style={'font-weight': 'bold', 'font-size': 20}),
+                            html.Div('Figure 1. Model Performance',
+                                     style={'font-weight': 'bold', 'font-size': 14, 'textAlign': 'middle'}),
+                            html.Div(className='container',
+                                     children=[html.Img(src=app.get_asset_url('Finalmodel_Performance.png'),
+                                                        style={'height': '90%', 'width': '90%'}),
+                                                html.Img(src=app.get_asset_url('Finalmodel_ROC_chart.png'),
+                                                        style={'height': '60%', 'width': '60%'})]),
+                            html.Div('Figure 2. Feature importance',
+                                     style={'font-weight': 'bold', 'font-size': 14}),
                             html.Div(className='container',
                                      children=[html.Img(src=app.get_asset_url('Feature_Importance.png'),
-                                                        style={'height': '90%', 'width': '90%'})])])
+                                                        style={'height': '90%', 'width': '90%'})]),
+                            ])
                         ], style={'padding': '20px 20px'})),
                     id="collapse",
                 ),
