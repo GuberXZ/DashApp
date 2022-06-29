@@ -283,7 +283,7 @@ app.layout = html.Div([
                                      style={'font-weight': 'bold', 'font-size': 14}),
                             html.Div(['The data was split into a training set (70%, n=113) and a test set (30%, '
                                       'n=49). The final model '
-                                      'achieved an average AUC of 1.0 in the training set and 0.86 in the test set'
+                                      'achieved an average AUC of 1.0 in the training set and 0.86 in the test set.'
                                       'Figure 2 to the far right indicates what the model identified as '
                                       'importance of predictors of the surgical margin. The more important features are '
                                       'towards the top of the figure, which includes characteristics like affected '
