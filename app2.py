@@ -673,7 +673,7 @@ def render_content(tab,data_patient):
             dbc.Row([html.Div(["The figure below indicates the feature importance of for each of the classified " 
                                "class of factors on the model prediction of the patient's surgical margin likelihood."
                                " The pie chart on the left represents the most important features for the classification"
-                               "of Surgical Margin as negative and the pie chart on the left for the classification "
+                               "of Surgical Margin as negative and the pie chart on the right for it's classification "
                                "as positive."],
                               style={'font-size': 16, 'padding': '10px 45px'})]),
             dbc.Row(dcc.Graph( 
