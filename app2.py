@@ -72,7 +72,7 @@ app.layout = html.Div([
                               style={'font-weight': 'bold', 'font-size': 16, 'padding': '10px 25px'})]),
             dbc.Row([
                 dbc.Col(html.Div([
-                    html.Label('Prostate volume (unit?): '),
+                    html.Label('Prostate volume: '),
                     dcc.Input(
                         type="number",
                         debounce=True,
@@ -81,7 +81,7 @@ app.layout = html.Div([
                     )
                 ]), width={"size": 3}, style={'padding': '10px 10px'}),
                 dbc.Col(html.Div([
-                    html.Label('PSA value at MRI (ng/mL?): '),
+                    html.Label('PSA value at MRI: '),
                     dcc.Input(
                         type="number",
                         debounce=True,
@@ -90,7 +90,7 @@ app.layout = html.Div([
                     )
                 ]), width={"size": 3}, style={'padding': '10px 10px'}),
                 dbc.Col(html.Div([
-                    html.Label('Lesion size (cm?): '),
+                    html.Label('Lesion size: '),
                     dcc.Input(
                         type="number",
                         debounce=True,
@@ -113,7 +113,7 @@ app.layout = html.Div([
             ], style={'padding': '10px 25px'}),
             dbc.Row([
                 dbc.Col(html.Div([
-                    html.Label('Capsular contact length (units?): '),
+                    html.Label('Capsular contact length: '),
                     dcc.Input(
                         type="number",
                         debounce=True,
